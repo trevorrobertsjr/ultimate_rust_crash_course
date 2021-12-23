@@ -1,16 +1,22 @@
 // Silence some warnings so they don't distract from the exercise.
 #![allow(unused_variables)]
+use b_functions::greet;
+//why both need to be imported
+use rand::Rng;
+use rand::thread_rng;
 
 fn main() {
+    greet();
     let width = 4;
     let height = 7;
     let depth = 10;
+    println!("{}", thread_rng().gen_range(0,100));
     // 1. Try running this code with `cargo run` and take a look at the error.
     //
     // See if you can fix the error. It is right around here, somewhere.  If you succeed, then
     // doing `cargo run` should succeed and print something out.
     
-        let area = area_of(width, height);
+    let area = area_of(width, height);
     
     println!("Area is {}", area);
 
