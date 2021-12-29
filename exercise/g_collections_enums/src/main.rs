@@ -9,7 +9,11 @@
 // - `Miss`
 //
 // You will need to complete 1b as well before you will be able to run this program successfully.
-
+enum Shot {
+    Bullseye,
+    Hit(f64),
+    Miss
+}
 impl Shot {
     // Here is a method for the `Shot` enum you just defined.
     fn points(self) -> i32 {
@@ -18,6 +22,20 @@ impl Shot {
         // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
         // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
         // - return 0 points if `self` is a Miss
+        match self {
+            Shot::Bullseye =>5,
+            Shot::Miss =>0,
+            // Shot::Hit(x) => {
+            //     if x < 3.0 {
+            //         2
+            //     } else {
+            //         1
+            //     }
+            // }
+            // using guards - https://doc.rust-lang.org/rust-by-example/flow_control/match/guard.html
+            Shot::Hit(x) if x < 3.0 =>2,
+            Shot::Hit(x) =>1,
+        }
     }
 }
 
@@ -34,10 +52,33 @@ fn main() {
     //      - Less than 1.0 -- `Shot::Bullseye`
     //      - Between 1.0 and 5.0 -- `Shot::Hit(value)`
     //      - Greater than 5.0 -- `Shot::Miss`
+    for coord in arrow_coords {
+        coord.print_description();
+        // let strike_location = coord.distance_from_center();
+        // if strike_location < 1.0 {
+        //     shots.push(Shot::Bullseye)
+        // } else if coord.distance_from_center() > 5.0 {
+        //     shots.push(Shot::Miss)
+        // } else {
+        //     shots.push(Shot::Hit(strike_location))
+        // }
+
+        // most idiomatic way to assign shot value would be this approach
+        let shot = match coord.distance_from_center() {
+            x if x <1.0 => Shot::Bullseye,
+            x if x <5.0 => Shot::Hit(x),
+            _ => Shot::Miss,
+        // assigning a value from the match. So, we need a ;
+        };
+        shots.push(shot);
+    }
 
 
     let mut total = 0;
     // 3. Finally, loop through each shot in shots and add its points to total
+    for shot in shots {
+        total+=shot.points();
+    }
 
     println!("Final point total is: {}", total);
 }
@@ -60,7 +101,6 @@ impl Coord {
             self.x,
             self.y);
     }
-
 }
 
 // Generate some random coordinates
